@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_wide">50dp</dimen>
+    <dimen name="team_name_text_size">24sp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
+</resources>
