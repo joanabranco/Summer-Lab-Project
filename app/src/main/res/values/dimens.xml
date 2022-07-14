@@ -3,4 +3,5 @@
     <dimen name="margin_wide">50dp</dimen>
     <dimen name="team_name_text_size">24sp</dimen>
     <dimen name="button_text_size">14sp</dimen>
+    <dimen name="button_image_size">15dp</dimen>
 </resources>

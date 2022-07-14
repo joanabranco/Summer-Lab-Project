@@ -6,5 +6,15 @@
     <string name="points2_button">+2 Points</string>
     <string name="points1_button">Free Throw</string>
     <string name="reset_button">Reset</string>
+    <string name="score_points">0</string>
+    <string name="edit_teamA_name" />
+    <string name="edit_teamB_name" />
+    <string name="New_team_name">Team</string>
+    <string name="quit_button">Quit</string>
+    <string name="start_button">Start</string>
+    <string name="pause_button">Pause</string>
+    <string name="resume_button">Resume</string>
+    <string name= "time_button">Start</string>
+    <string name="time_text">10:00</string>/>
     />
 </resources>
