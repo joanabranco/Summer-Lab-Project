@@ -15,6 +15,8 @@
     <string name="pause_button">Pause</string>
     <string name="resume_button">Resume</string>
     <string name= "time_button">Start</string>
-    <string name="time_text">10:00</string>/>
+    <string name="time_text">10:00</string>
+    <string name="entry_text">"How to play: "</string>
+    <string name="entry_button">Play</string>/>
     />
 </resources>

@@ -8,25 +8,41 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.example.basketballscoresystem.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding : ActivityMainBinding
+
     private var totalScoreA = 0
     private var totalScoreB = 0
+
+    private val teamA : TeamA = TeamA ("Team A","0")
+    private val teamB : TeamB = TeamB ("Team B", "0")
+
+    private var startMilliSeconds : Long = 6000  //mudar para 600000
+    private lateinit var timer : CountDownTimer
+    private var timeIsRunning = false
+    private var timeLeft : Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        binding.teamA = teamA
+        binding.teamB = teamB
+
         whatButton()
     }
 
     private fun whatButton() {
         val buttonClicked:List<View> = listOf(teamA_3points, teamA_2points, teamA_1point,
                                               teamB_3points, teamB_2points, teamB_1point,
-                                              start_button, pause_button, reset_button,
+                                              start_pause_button, reset_button,
                                               edit_teamA_name, edit_teamB_name)
 
         for (item in buttonClicked){
@@ -36,8 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun doButton(view:View) {
         when (view.id){
-            R.id.start_button -> startGame ()
-            R.id.pause_button -> pauseGame ()
+            R.id.start_pause_button -> startGame ()
 
             R.id.teamA_1point -> addPointsA(1)
             R.id.teamA_2points -> addPointsA(2)
@@ -55,30 +70,64 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
-        //timer.start()
-        start_button.visibility = View.INVISIBLE
-        pause_button.visibility = View.VISIBLE
-        reset_button.visibility = View.VISIBLE
+        if (timeIsRunning) {
+            pauseTimer()
+        }
+        else {
+            startTimer()
+        }
+        updateTimeText()
     }
 
-    private fun pauseGame() {
-        //timer.cancel()
-        /*
-        pause_button.setOnClickListener {
-            timer.start()
-        }*/
+    private fun startTimer() {
+         timer = object : CountDownTimer (startMilliSeconds, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeft = millisUntilFinished
+                updateTimeText()
+            }
+
+            override fun onFinish() {
+                timeIsRunning = false
+                start_pause_button.text = "Start"
+                start_pause_button.visibility = View.INVISIBLE
+                reset_button.visibility = View.VISIBLE
+                resetAll()
+            }
+        }.start()
+        timeIsRunning = true
+        start_pause_button.text = "Pause"
+        reset_button.visibility = View.INVISIBLE
+    }
+
+    private fun pauseTimer() {
+        timer.cancel()
+        timeIsRunning = false
+        reset_button.visibility = View.VISIBLE
+        updateTimeText()
+    }
+
+    private fun resetTimer() {
+        timeLeft = startMilliSeconds
+        updateTimeText()
+        reset_button.visibility = View.INVISIBLE
+    }
+
+    private fun updateTimeText() {
+        val minutes = (timeLeft / 1000) / 60
+        val seconds = (timeLeft / 1000) % 60
+
+        val timeFormat = "$minutes : $seconds"
+        time_text.text = timeFormat
     }
 
     private fun addPointsA(points:Int) {
-        totalScoreA += points
-        teamA_score.text = totalScoreA.toString()
-        teamA_score.setTextColor(Color.GREEN)
+            totalScoreA += points
+            teamA.score = totalScoreA.toString()
     }
 
     private fun addPointsB(points:Int) {
         totalScoreB += points
         teamB_score.text = totalScoreB.toString()
-        teamB_score.setTextColor(Color.MAGENTA)
     }
 
     private fun resetAll() {
@@ -86,23 +135,17 @@ class MainActivity : AppCompatActivity() {
         totalScoreA = 0
         totalScoreB = 0
         teamA_score.text = totalScoreA.toString()
-        //teamA_score.setTextColor(Color.WHITE)
         teamB_score.text = totalScoreB.toString()
-        //teamB_score.setTextColor(Color.WHITE)
 
-        //pôr tempo a 10 minutos e ativar botão start
-        start_button.visibility = View.VISIBLE
-        pause_button.visibility = View.INVISIBLE
-        time_text.text = R.string.time_text.toString()
-        }
+        resetTimer()
+    }
+
 
     private fun winnerTeam() {
-        var teamA = teamA_name.text.toString()
-        var teamB = teamB_name.text.toString()
         if (totalScoreA > totalScoreB)
-            Toast.makeText(this, " $teamA  is the winner!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${teamA.name}  is the winner!", Toast.LENGTH_SHORT).show()
         else if (totalScoreA < totalScoreB)
-            Toast.makeText(this, "$teamB is the winner!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${teamB.name} is the winner!", Toast.LENGTH_SHORT).show()
             else Toast.makeText(this, "That´s a tie!", Toast.LENGTH_SHORT).show()
     }
 
@@ -115,12 +158,14 @@ class MainActivity : AppCompatActivity() {
 
         //quando for carregado o botão de concluir
         done_teamA_name.setOnClickListener{
-            var teamA = teamA_editable.text.toString()
-            Toast.makeText(this, " name was edited to $teamA", Toast.LENGTH_SHORT).show()
-            teamA_name.text = teamA_editable.text.toString() //novo nome é declarado
-            teamA_editable.visibility = View.GONE //texto editável desaparece
-            done_teamA_name.visibility = View.GONE
-            teamA_name.visibility = View.VISIBLE //novo nome aparece
+            binding.apply {
+                teamA?.name = binding.teamAEditable.text.toString() //novo nome é declarado
+                teamA_name.visibility = View.VISIBLE //novo nome aparece
+                invalidateAll()
+                teamA_editable.visibility = View.GONE //texto editável desaparece
+                done_teamA_name.visibility = View.GONE
+            }
+            Toast.makeText(this, "Team A name was edited to ${teamA.name}", Toast.LENGTH_SHORT).show()
             hideKeyboard (teamA_editable)
         }
     }
@@ -133,12 +178,13 @@ class MainActivity : AppCompatActivity() {
         done_teamB_name.visibility = View.VISIBLE
 
         done_teamB_name.setOnClickListener{
-            var teamB = teamB_editable.text.toString()
-            Toast.makeText(this, "Team B name was edited to $teamB", Toast.LENGTH_SHORT).show()
-            teamB_name.text = teamB_editable.text.toString()
-            teamB_editable.visibility = View.GONE
-            done_teamB_name.visibility = View.GONE
-            teamB_name.visibility = View.VISIBLE
+            binding.apply {
+                teamB?.name = binding.teamBEditable.text.toString()
+                teamB_editable.visibility = View.GONE
+                done_teamB_name.visibility = View.GONE
+                teamB_name.visibility = View.VISIBLE
+            }
+            Toast.makeText(this, "Team B name was edited to ${teamB.name}", Toast.LENGTH_SHORT).show()
             hideKeyboard (teamB_editable)
         }
     }
