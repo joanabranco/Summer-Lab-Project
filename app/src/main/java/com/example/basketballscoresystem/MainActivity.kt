@@ -1,7 +1,6 @@
 package com.example.basketballscoresystem
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -16,17 +15,22 @@ class MainActivity : AppCompatActivity() {
     private var totalScoreA = 0
     private var totalScoreB = 0
 
+    private lateinit var timer : CountDownTimer
+    private var startMilliSeconds : Long = 600000
+    private var timeIsRunning : Boolean = false
+    private var timeLeft : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         whatButton()
     }
 
     private fun whatButton() {
         val buttonClicked:List<View> = listOf(teamA_3points, teamA_2points, teamA_1point,
                                               teamB_3points, teamB_2points, teamB_1point,
-                                              start_button, pause_button, reset_button,
+                                              start_pause_button, reset_button,
                                               edit_teamA_name, edit_teamB_name)
 
         for (item in buttonClicked){
@@ -36,8 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun doButton(view:View) {
         when (view.id){
-            R.id.start_button -> startGame ()
-            R.id.pause_button -> pauseGame ()
+            R.id.start_pause_button -> startGame ()
 
             R.id.teamA_1point -> addPointsA(1)
             R.id.teamA_2points -> addPointsA(2)
@@ -55,30 +58,64 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
-        //timer.start()
-        start_button.visibility = View.INVISIBLE
-        pause_button.visibility = View.VISIBLE
+        if (timeIsRunning) {
+            pauseTimer()
+        }
+        else {
+            startTimer()
+        }
+    }
+
+    private fun startTimer() {
+        timer = object : CountDownTimer (startMilliSeconds, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeft = millisUntilFinished
+                updateTimeText()
+            }
+
+            override fun onFinish() {
+                timeIsRunning = false
+                start_pause_button.text = "Start"
+                start_pause_button.visibility = View.INVISIBLE
+                reset_button.visibility = View.VISIBLE
+                resetAll()
+            }
+        }.start()
+        timeIsRunning = true
+        start_pause_button.text = "Pause"
+        reset_button.visibility = View.INVISIBLE
+    }
+
+    private fun pauseTimer() {
+        startMilliSeconds = timeLeft
+        timeIsRunning = false
+        timer.cancel()
+        start_pause_button.text = "Resume"
         reset_button.visibility = View.VISIBLE
     }
 
-    private fun pauseGame() {
-        //timer.cancel()
-        /*
-        pause_button.setOnClickListener {
-            timer.start()
-        }*/
+    private fun resetTimer() {
+        timeLeft = 600000
+        updateTimeText()
+        reset_button.visibility = View.INVISIBLE
+    }
+
+    private fun updateTimeText() {
+        val minutes = (timeLeft / 1000) / 60
+        val seconds = (timeLeft / 1000) % 60
+
+        val timeFormat = "$minutes : $seconds"
+        time_text.text = timeFormat
     }
 
     private fun addPointsA(points:Int) {
         totalScoreA += points
         teamA_score.text = totalScoreA.toString()
-        teamA_score.setTextColor(Color.GREEN)
     }
 
     private fun addPointsB(points:Int) {
         totalScoreB += points
         teamB_score.text = totalScoreB.toString()
-        teamB_score.setTextColor(Color.MAGENTA)
     }
 
     private fun resetAll() {
@@ -86,41 +123,34 @@ class MainActivity : AppCompatActivity() {
         totalScoreA = 0
         totalScoreB = 0
         teamA_score.text = totalScoreA.toString()
-        //teamA_score.setTextColor(Color.WHITE)
         teamB_score.text = totalScoreB.toString()
-        //teamB_score.setTextColor(Color.WHITE)
 
-        //pôr tempo a 10 minutos e ativar botão start
-        start_button.visibility = View.VISIBLE
-        pause_button.visibility = View.INVISIBLE
-        time_text.text = R.string.time_text.toString()
-        }
+        resetTimer()
+    }
 
     private fun winnerTeam() {
-        var teamA = teamA_name.text.toString()
-        var teamB = teamB_name.text.toString()
         if (totalScoreA > totalScoreB)
-            Toast.makeText(this, " $teamA  is the winner!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${teamA_name.text}  is the winner!", Toast.LENGTH_SHORT).show()
         else if (totalScoreA < totalScoreB)
-            Toast.makeText(this, "$teamB is the winner!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${teamB_name.text} is the winner!", Toast.LENGTH_SHORT).show()
             else Toast.makeText(this, "That´s a tie!", Toast.LENGTH_SHORT).show()
     }
 
     private fun changeNameA() {
-        edit_teamA_name.visibility = View.GONE //botão para editar
-        teamA_name.visibility = View.INVISIBLE //nome "Team A"
+        edit_teamA_name.visibility = View.GONE
+        teamA_name.visibility = View.INVISIBLE
 
-        teamA_editable.visibility = View.VISIBLE //texto editável onde vai ser inserido o novo nome
-        done_teamA_name.visibility = View.VISIBLE //botão para concluir
+        teamA_editable.visibility = View.VISIBLE
+        done_teamA_name.visibility = View.VISIBLE
 
         //quando for carregado o botão de concluir
         done_teamA_name.setOnClickListener{
             var teamA = teamA_editable.text.toString()
-            Toast.makeText(this, " name was edited to $teamA", Toast.LENGTH_SHORT).show()
-            teamA_name.text = teamA_editable.text.toString() //novo nome é declarado
-            teamA_editable.visibility = View.GONE //texto editável desaparece
+            Toast.makeText(this, " Team A name was edited to $teamA", Toast.LENGTH_SHORT).show()
+            teamA_name.text = teamA_editable.text.toString()
+            teamA_editable.visibility = View.GONE
             done_teamA_name.visibility = View.GONE
-            teamA_name.visibility = View.VISIBLE //novo nome aparece
+            teamA_name.visibility = View.VISIBLE
             hideKeyboard (teamA_editable)
         }
     }
