@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">The Switcher</string>
+    <string name="kitchen_text">Kitchen</string>
+    <string name="living_room_text">Living Room</string>
+    <string name="master_bedroom_text">Master Bedroom</string>
+    <string name="guest_bedroom_text">Guest\'s Bedroom</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="light_text">Your kitchen light is</string>
+</resources>
