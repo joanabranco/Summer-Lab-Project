@@ -1,2 +1,2 @@
 # Summer Lab Project
- A basketball score system app
+Projects done during the Summer Lab Internship
