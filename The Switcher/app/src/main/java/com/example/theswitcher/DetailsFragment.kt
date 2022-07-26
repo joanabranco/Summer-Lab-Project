@@ -3,6 +3,7 @@ package com.example.theswitcher
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.theswitcher.databinding.FragmentDetailsBinding
@@ -23,9 +24,21 @@ class DetailsFragment : Fragment() {
         }
 
         "Your $division light is".also { binding.divisionText.text = it }
-        binding.onOffText.text = "$isOn"
-
+        binding.apply{
+            if (!isOn) {
+                onOffText.text = "OFF"
+                lightOnImage.visibility = INVISIBLE
+                lightOffImage.visibility = VISIBLE
+            }
+                else {
+                    onOffText.text = "ON"
+                    lightOnImage.visibility = VISIBLE
+                    lightOffImage.visibility = INVISIBLE
+            }
+        }
         return binding.root
     }
+
+
 
 }

@@ -13,7 +13,3 @@ P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 i
 9app/src/main/java/com/example/theswitcher/DivisionData.kt,4\0\40a12b47c1e0f3a7e0a7e312bd4d35e63253882c
-j
-:app/src/main/java/com/example/theswitcher/TitleFragment.kt,8\2\822a776c44b16a4c895e26f112ddcca0b44ea7c6
-l
-<app/src/main/java/com/example/theswitcher/DivisionAdapter.kt,7\5\755c35dbd0783a0b512e4955bbff672178386741

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/item_division"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/kitchen_text"
+        android:id="@+id/list_division_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/horizontal_margin"
-        app:layout_constraintBaseline_toBaselineOf="@+id/kitchen_switch"
+        app:layout_constraintBaseline_toBaselineOf="@+id/list_switch_switch"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
-        android:id="@+id/kitchen_switch"
+        android:id="@+id/list_switch_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/vertical_margin"

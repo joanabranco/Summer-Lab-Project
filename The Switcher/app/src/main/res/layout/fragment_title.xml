@@ -6,7 +6,7 @@
 
     <data>
         <variable
-            name="DivisionDetails"
+            name="DivisionData"
             type="com.example.theswitcher.DivisionData" />
     </data>
 
@@ -27,91 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" >
-
-        <TextView
-            android:id="@+id/kitchen_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:text="@{DivisionDetails.name}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/kitchen_switch"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <TextView
-            android:id="@+id/guest_bedroom_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:text="@string/guest_bedroom_text"
-            app:layout_constraintBaseline_toBaselineOf="@+id/guest_bedroom_switch"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/master_bedroom_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:text="@string/master_bedroom_text"
-            app:layout_constraintBaseline_toBaselineOf="@+id/master_bedroom_switch"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/living_room_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:text="@string/living_room_text"
-            app:layout_constraintBaseline_toBaselineOf="@+id/living_room_switch"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Switch
-            android:id="@+id/kitchen_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            app:layout_constraintBottom_toTopOf="@+id/living_room_switch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/kitchen_text"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Switch
-            android:id="@+id/master_bedroom_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            app:layout_constraintBottom_toTopOf="@+id/guest_bedroom_switch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/master_bedroom_text"
-            app:layout_constraintTop_toBottomOf="@+id/living_room_switch" />
-
-        <Switch
-            android:id="@+id/living_room_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            app:layout_constraintBottom_toTopOf="@+id/master_bedroom_switch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/living_room_text"
-            app:layout_constraintTop_toBottomOf="@+id/kitchen_switch" />
-
-        <Switch
-            android:id="@+id/guest_bedroom_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:layout_marginBottom="480dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/guest_bedroom_text"
-            app:layout_constraintTop_toBottomOf="@+id/master_bedroom_switch" />
-
-
 
         </ListView>
     </androidx.constraintlayout.widget.ConstraintLayout>
