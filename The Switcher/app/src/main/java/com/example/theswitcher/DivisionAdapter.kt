@@ -1,51 +1,41 @@
 package com.example.theswitcher
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Switch
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
-class DivisionAdapter(private val divisionClick: DivisionClick, private val context: Context, private val dataSource: List<DivisionData>) : BaseAdapter() {
+class DivisionAdapter (private val divisionClick : DivisionClick, private val divisionList: List<DivisionData>) : RecyclerView.Adapter<DivisionAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_division, parent, false)
 
-    override fun getCount(): Int {
-        return dataSource.size
+        return ViewHolder(view)
     }
 
-    override fun getItem(position: Int): Any {
-        return dataSource[position]
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = this.divisionList[position]
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val rowView = inflater.inflate(R.layout.list_item_division, parent, false)
-
-        val divisionTextView = rowView.findViewById(R.id.list_division_text) as TextView
-        val isOnSwitch = rowView.findViewById(R.id.list_switch_switch) as Switch
-        val cell = rowView.findViewById(R.id.item_division) as View
-
-        val divisionData = getItem(position) as DivisionData
-
-        cell.setOnClickListener{
-            divisionClick.clickDivision(position, 0)
+        holder.apply {
+            divisionText.text = item.name
+            isOnSwitch.isChecked = item.mode
+            itemView.setOnClickListener{
+                divisionClick.clickDivision(position, 0)
+            }
+            isOnSwitch.setOnClickListener{
+                divisionClick.clickDivision(position, 1)
+            }
         }
-
-        isOnSwitch.setOnClickListener{
-            divisionClick.clickDivision(position, 1)
-        }
-
-        divisionTextView.text = divisionData.name
-        isOnSwitch.isChecked = divisionData.mode
-
-        return rowView
     }
- }
 
+    override fun getItemCount(): Int {
+        return this.divisionList.size
+    }
 
+    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+        val divisionText: TextView = itemView.findViewById(R.id.list_division_text)
+        val isOnSwitch: Switch = itemView.findViewById(R.id.list_switch)
+    }
+}
